@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Baholar daftarchasi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    .input-container {
+      margin-bottom: 15px;
+    }
+    input[type="text"] {
+      width: 300px;
+      padding: 5px;
+      font-size: 14px;
+    }
+    button {
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #natija {
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Baholar daftarchasi</h2>
+
+  <div class="input-container">
+    <input type="text" id="ballarInput" placeholder="Masalan: 85, 92, 60, 48">
+    <button onclick="tahlilQilish()">Tahlil qilish</button>
+  </div>
+
+  <div id="natija">Ballarni 0 dan 100 gacha, vergul bilan kiriting</div>
+
+  <script>
+    function bahoBer(ortacha) {
+      if (ortacha >= 86) {
+        return "A'lo (5)";
+      } else if (ortacha >= 71) {
+        return "Yaxshi (4)";
+      } else if (ortacha >= 56) {
+        return "Qoniqarli (3)";
+      } else {
+        return "Qoniqarsiz (2)";
+      }
+    }
+
+    function tahlilQilish() {
+      const input = document.getElementById("ballarInput").value.trim();
+      const natijaDiv = document.getElementById("natija");
+
+      if (!input) {
+        natijaDiv.innerHTML = "Ballarni 0 dan 100 gacha, vergul bilan kiriting";
+        return;
+      }
+
+      // Matnni vergul bo'yicha ajratib, massivga o'tkazamiz
+      const elementlar = input.split(",");
+      const ballar = [];
+
+      // Har bir elementni tekshiramiz va son ko'rinishiga o'tkazamiz
+      for (let i = 0; i < elementlar.length; i++) {
+        const str = elementlar[i].trim();
+        const num = Number(str);
+
+        if (str === "" || isNaN(num) || num < 0 || num > 100) {
+          natijaDiv.innerHTML = "Xatolik: Ballar 0 va 100 oralig'idagi sonlar bo'lishi kerak!";
+          return;
+        }
+
+        ballar.push(num);
+      }
+
+      const fanlarSoni = ballar.length;
+      let yigindi = 0;
+      let otganFanlar = 0;
+
+      let engYuqori = ballar[0];
+      let engPast = ballar[0];
+
+      for (let i = 0; i < ballar.length; i++) {
+        const ball = ballar[i];
+        yigindi += ball;
+
+        if (ball >= 56) {
+          otganFanlar++;
+        }
+
+        engYuqori = Math.max(engYuqori, ball);
+        engPast = Math.min(engPast, ball);
+      }
+
+      
+      const ortachaBall = (yigindi / fanlarSoni).toFixed(1);
+      const umumiyBaho = bahoBer(ortachaBall);
+
+      
+      natijaDiv.innerHTML = `
+        Fanlar soni: ${fanlarSoni}<br>
+        O'rtacha ball: ${ortachaBall}<br>
+        Eng yuqori: ${engYuqori}<br>
+        Eng past: ${engPast}<br>
+        O'tgan fanlar: ${otganFanlar} ta<br>
+        Umumiy baho: ${umumiyBaho}
+      `;
+    }
+  </script>
+
+</body>
+</html>
